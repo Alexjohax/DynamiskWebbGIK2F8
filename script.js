@@ -1,17 +1,12 @@
 "use strict";
 
-const bookList = [
-  {
-    id: 1,
-    author: "Charles Dickens",
-    title: "Oliver Twist",
-  },
-  {
-    id: 2,
-    author: "William Shakespeare",
-    title: "Hamlet",
-  },
-];
+let bookList = [];
+
+window.addEventListener("load", () => {
+  getAll().then((apiBooks) => {
+    bookList = apiBooks;
+  });
+});
 
 const searchInput = document.getElementById("searchField");
 searchInput.addEventListener("keyup", (e) =>
@@ -34,7 +29,9 @@ const renderList = (list) => {
     existingElement.remove();
   }
 
-  if (list.length > 0) {
+  list.length > 0 &&
+    searchField.value &&
     root.insertAdjacentHTML("beforeend", BookList(list));
-  }
 };
+
+/* getAll().then((bookList) => renderList(bookList)); */
