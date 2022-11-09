@@ -29,9 +29,27 @@ const searchBooks = (searchTerm) => {
       filteredList.push(bookList[i]);
     }
   }
-  console.log(filteredList);
+  renderList(filteredList);
 };
 
 const renderList = (list) => {
-  console.log(list);
+  let html = `<ul id="thelist" class="book-list rounded-md border-2 border-blue-400 bg-white w-full mx-autp">`;
+  for (let i = 0; i < list.length; i++) {
+    html += `
+        <li class="book-list__item mb-2 mx-2 last:mb-0 p-3 text-indigo-800 last:border-b-0 border-b border-indigo-500 cursor-pointer">
+        ${list[i].author} - ${list[i].title}
+        </li>
+        `;
+  }
+  html += `</ul>`;
+
+  const existingElement = document.getElementById("thelist");
+  const root = document.getElementById("root");
+
+  if (existingElement) {
+    root.removeChild(existingElement);
+    console.log(existingElement);
+  }
+
+  root.insertAdjacentHTML("beforeend", html);
 };
