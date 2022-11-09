@@ -21,8 +21,8 @@ const handleKeyPress = (e) => {
 const searchInput = document.getElementById("searchField");
 searchInput.addEventListener("keyup", handleKeyPress);
 
-const filteredList = [];
 const searchBooks = (searchTerm) => {
+  const filteredList = [];
   for (let i = 0; i < bookList.length; i++) {
     const title = bookList[i].title.toLowerCase();
     if (title.indexOf(searchTerm.toLowerCase()) >= 0) {
@@ -47,7 +47,7 @@ const renderList = (list) => {
   const root = document.getElementById("root");
 
   if (existingElement) {
-    root.removeChild(existingElement);
+    existingElement.remove();
     console.log(existingElement);
   }
 
