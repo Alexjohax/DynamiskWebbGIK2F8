@@ -1,6 +1,5 @@
 "use strict";
 
-const searchInput = null;
 const bookList = [
   {
     id: 1,
@@ -13,12 +12,14 @@ const bookList = [
     title: "Hamlet",
   },
 ];
-
-const handleKeyPress = (input) => {
+const handleKeyPress = (e) => {
   /* 1. Ta emot/läsa av värdet i inputfältet
-        2. Skicka värdet till searchBooks */
-  searchBooks(input);
+            2. Skicka värdet till searchBooks */
+  searchBooks(e.target.value);
 };
+
+const searchInput = document.getElementById("searchField");
+searchInput.addEventListener("keyup", handleKeyPress);
 
 const filteredList = [];
 const searchBooks = (searchTerm) => {
@@ -34,5 +35,3 @@ const searchBooks = (searchTerm) => {
 const renderList = (list) => {
   console.log(list);
 };
-
-handleKeyPress("e");
