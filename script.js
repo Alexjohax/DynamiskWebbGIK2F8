@@ -12,25 +12,19 @@ const bookList = [
     title: "Hamlet",
   },
 ];
-const handleKeyPress = (e) => {
-  /* 1. Ta emot/läsa av värdet i inputfältet
-            2. Skicka värdet till searchBooks */
-  searchBooks(e.target.value);
-};
 
 const searchInput = document.getElementById("searchField");
-searchInput.addEventListener("keyup", handleKeyPress);
-
-const searchBooks = (searchTerm) => {
-  const filteredList = [];
-  for (let i = 0; i < bookList.length; i++) {
-    const title = bookList[i].title.toLowerCase();
-    if (title.indexOf(searchTerm.toLowerCase()) >= 0) {
-      filteredList.push(bookList[i]);
-    }
-  }
-  renderList(filteredList);
-};
+searchInput.addEventListener("keyup", (e) =>
+  renderList(
+    bookList.filter(({ title, author }) => {
+      const searchTerm = e.target.value.toLowerCase();
+      return (
+        title.toLowerCase().indexOf(searchTerm) >= 0 ||
+        author.toLowerCase().indexOf(searchTerm) >= 0
+      );
+    })
+  )
+);
 
 const renderList = (list) => {
   const existingElement = document.getElementById("thelist");
