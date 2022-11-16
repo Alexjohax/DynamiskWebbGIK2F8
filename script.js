@@ -68,7 +68,7 @@ const renderList = (list) => {
 
 const renderPopup = (book, x, y) => {
   console.log(x, y);
-  const div = `<div id="popup" class="fixed rounded-md border-2 border-purple-600 z-10 bg-gradient-to-tr from-indigo-400 to-lime-300 px-5 py-5 flex top-[${y}px] left-[${x}px]">
+  const div = `<div id="popup" class="fixed rounded-md w-1/4 gap-2 border-2 border-purple-600 z-10 bg-gradient-to-tr from-indigo-400 to-lime-300 px-5 py-5 flex top-[${y}px] left-[${x}px]">
   <div class="basis-2/3 flex flex-col space-y-2.5 text-sm">
   <p>Title: ${book.title}</p>
   <p>Author: ${book.author}</p>
@@ -76,7 +76,7 @@ const renderPopup = (book, x, y) => {
   <p>Release date: ${book.releaseDate}</p>
   </div>
   <div class="basis-1/3">
-  <img src="${book.coverImage}" alt="${book.title}" width=120/>
+  <img class="max-w-fit" src="${book.coverImage}" alt="${book.title}" width=120/>
   </div>
   
   </div>`;
