@@ -4,10 +4,14 @@ let bookList = [];
 
 window.addEventListener("load", () => {
   getAll().then((apiBooks) => {
-    window.bookList = apiBooks;
-    bookList = apiBooks;
+    //window.bookList = apiBooks;
+    //bookList = apiBooks;
+    localStorage.setItem("bookList", JSON.stringify(apiBooks));
   });
 });
+
+bookList = JSON.parse(localStorage.getItem("bookList"));
+//console.log(localStorage.getItem("bookList"));
 
 const searchInput = document.getElementById("searchField");
 searchInput.addEventListener("keyup", (e) =>
@@ -24,6 +28,7 @@ searchInput.addEventListener("keyup", (e) =>
 
 const getBookById = (id) => {
   //console.log(id);
+
   return bookList.filter((item) => item.id == id).shift();
 };
 
@@ -47,28 +52,29 @@ const renderList = (list) => {
       } else {
         id = e.target.id;
       }
-      console.log("event", e);
-      const element = renderPopup(getBookById(id), e.pageX, e.pageY);
+      //console.log("event", e);
+      //console.log(id);
+      const bookDetail = renderPopup(getBookById(id), e.pageX, e.pageY);
 
-      root.insertAdjacentHTML("beforeend", element);
+      root.insertAdjacentHTML("beforeend", bookDetail);
     });
     item.addEventListener("mouseout", (e) => {
-      const element = document.getElementById("popup");
-      element.remove();
+      const bookDetail = document.getElementById("bookDetail");
+      bookDetail.remove();
     });
     item.addEventListener("mousemove", (e) => {
-      const element = document.getElementById("popup");
-      if (element) {
-        element.style.top = e.pageY + "px";
-        element.style.left = e.pageX + "px";
+      const bookDetail = document.getElementById("bookDetail");
+      if (bookDetail) {
+        bookDetail.style.top = e.pageY + "px";
+        bookDetail.style.left = e.pageX + "px";
       }
     });
   });
 };
 
 const renderPopup = (book, x, y) => {
-  console.log(x, y);
-  const div = `<div id="popup" class="fixed rounded-md w-1/4 gap-2 border-2 border-purple-600 z-10 bg-gradient-to-tr from-indigo-400 to-lime-300 px-5 py-5 flex top-[${y}px] left-[${x}px]">
+  //console.log(x, y);
+  const div = `<div id="bookDetail" class="fixed rounded-md w-1/4 gap-2 border-2 border-purple-600 z-10 bg-gradient-to-tr from-indigo-400 to-lime-300 px-5 py-5 flex top-[${y}px] left-[${x}px]">
   <div class="basis-2/3 flex flex-col space-y-2.5 text-sm">
   <p>Title: ${book.title}</p>
   <p>Author: ${book.author}</p>
