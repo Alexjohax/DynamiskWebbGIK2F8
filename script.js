@@ -1,22 +1,15 @@
 "use strict";
 
-let bookList = [];
-
 window.addEventListener("load", () => {
   getAll().then((apiBooks) => {
-    //window.bookList = apiBooks;
-    //bookList = apiBooks;
     localStorage.setItem("bookList", JSON.stringify(apiBooks));
   });
 });
 
-bookList = JSON.parse(localStorage.getItem("bookList"));
-//console.log(localStorage.getItem("bookList"));
-
 const searchInput = document.getElementById("searchField");
 searchInput.addEventListener("keyup", (e) =>
   renderList(
-    bookList.filter(({ title, author }) => {
+    JSON.parse(localStorage.getItem("bookList")).filter(({ title, author }) => {
       const searchTerm = e.target.value.toLowerCase();
       return (
         title.toLowerCase().indexOf(searchTerm) >= 0 ||
@@ -25,12 +18,6 @@ searchInput.addEventListener("keyup", (e) =>
     })
   )
 );
-
-const getBookById = (id) => {
-  //console.log(id);
-
-  return bookList.filter((item) => item.id == id).shift();
-};
 
 const renderList = (list) => {
   const existingElement = document.getElementById("thelist");
@@ -44,6 +31,7 @@ const renderList = (list) => {
     searchField.value &&
     root.insertAdjacentHTML("beforeend", BookList(list));
   let lista = document.querySelectorAll(".book-list__item");
+
   lista.forEach((item) => {
     item.addEventListener("mouseover", (e) => {
       let id;
@@ -52,13 +40,15 @@ const renderList = (list) => {
       } else {
         id = e.target.id;
       }
-      //console.log("event", e);
-      //console.log(id);
-      const bookDetail = renderPopup(getBookById(id), e.pageX, e.pageY);
-
-      root.insertAdjacentHTML("beforeend", bookDetail);
+      const bookDetail = document.getElementById("bookDetail");
+      if (bookDetail) {
+        bookDetail.remove();
+      } else {
+        renderPopup(id, e.pageX, e.pageY);
+      }
+      console.log("event", e.target);
     });
-    item.addEventListener("mouseout", (e) => {
+    item.addEventListener("mouseout", () => {
       const bookDetail = document.getElementById("bookDetail");
       bookDetail.remove();
     });
@@ -72,19 +62,26 @@ const renderList = (list) => {
   });
 };
 
-const renderPopup = (book, x, y) => {
-  //console.log(x, y);
-  const div = `<div id="bookDetail" class="fixed rounded-md w-1/4 gap-2 border-2 border-purple-600 z-10 bg-gradient-to-tr from-indigo-400 to-lime-300 px-5 py-5 flex top-[${y}px] left-[${x}px]">
-  <div class="basis-2/3 flex flex-col space-y-2.5 text-sm">
-  <p>Title: ${book.title}</p>
-  <p>Author: ${book.author}</p>
-  <p>Pages: ${book.pages}</p>
-  <p>Release date: ${book.releaseDate}</p>
-  </div>
-  <div class="basis-1/3">
-  <img class="max-w-fit" src="${book.coverImage}" alt="${book.title}" width=120/>
-  </div>
-  
-  </div>`;
-  return div;
+const renderPopup = async (id, x, y) => {
+  await getBook(id).then((apiBook) => {
+    let { id, author, title, coverImage, pages, releaseDate } = apiBook;
+    console.log(id, author, title, coverImage, pages, releaseDate);
+    const div = `<div id="bookDetail" class="fixed rounded-md w-1/4 gap-2 border-2 border-purple-600 z-10 bg-gradient-to-tr from-indigo-400 to-lime-300 px-5 py-5 flex top-[${y}px] left-[${x}px]">
+      <div class="basis-2/3 flex flex-col space-y-2.5 text-sm">
+      <p>Title: ${title}</p>
+      <p>Author: ${author}</p>
+      <p>Pages: ${pages}</p>
+      <p>Release date: ${releaseDate}</p>
+      </div>
+      <div class="basis-1/3">
+      <img class="max-w-fit" src="${
+        coverImage
+          ? coverImage
+          : "https://www.shutterstock.com/image-vector/red-book-isolated-on-white-260nw-118879087.jpg"
+      }" alt="${title}" width=120/>
+      </div>
+      
+      </div>`;
+    root.insertAdjacentHTML("beforeend", div);
+  });
 };
